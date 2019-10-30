@@ -1,3 +1,5 @@
+$ pipx install --spec git+https://github.com/alexpdp7/pdp7_timetracker.git pdp7_timetracker
+
 $ cat ~/.config/pdp7_timetracking/pdp7_timetracking.config 
 [default]
 postgres_connection_string: <connection string>
