@@ -1,4 +1,5 @@
 import configparser
+import datetime
 import pathlib
 
 import appdirs
@@ -65,7 +66,17 @@ class TimeTracker:
         self.dml(
             "insert into tracked_period(period, activity_id) values (%(range)s, %(activity_id)s)",
             activity_id=activity,
-            range=psycopg2.extras.DateTimeTZRange(
-                lower=lower, upper=upper, bounds="[]"
-            ),
+            range=psycopg2.extras.DateTimeTZRange(lower=lower, upper=upper),
         )
+
+    def stop(self, now=None):
+        now = now or datetime.datetime.now()
+        self.dml(
+            "update tracked_period set period = tstzrange(lower(period), %(upper)s) where upper(period) is null",
+            upper=now,
+        )
+
+    def start(self, activity, now=None):
+        self.stop(now=now)
+        now = now or datetime.datetime.now()
+        self.new_tracked_period(activity, now, None)
