@@ -9,6 +9,7 @@ python = ">=3.6"
 ipython = "^7.9"
 appdirs = "^1.4"
 psycopg2 = "^2.8"
+tabulate = "^0.8.5"
 
 [tool.poetry.scripts]
 titr = 'pdp7_timetracker.cmd:main'
