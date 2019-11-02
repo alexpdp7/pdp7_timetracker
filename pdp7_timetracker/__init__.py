@@ -37,9 +37,12 @@ class TimeTracker:
         self.stop(sql=sql, now=now)
         self.new_tracked_period(activity, now, None, sql=sql)
 
-    def load_schema(self, *, sql):
+    def get_schema(self):
         with open("schema.sql") as s:
-            sql.ddl(s.read())
+            return s.read()
+
+    def load_schema(self, *, sql):
+        sql.ddl(self.get_schema())
 
     def daily_report(self, day=None, *, sql):
         day = day or datetime.date.today()
