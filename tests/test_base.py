@@ -1,4 +1,5 @@
 import collections
+import datetime
 
 import pytest
 from testcontainers import postgres
@@ -53,4 +54,14 @@ def test_new_activity(tt):
         Record(id="bar", parent_id=None, id_path="bar"),
         Record(id="foo", parent_id=None, id_path="foo"),
         Record(id="baz", parent_id="foo", id_path="foo / baz"),
+    ]
+
+
+def test_start_stop(tt):
+    tt.new_activity("foo")
+    tt.start("foo", now=datetime.datetime(2019, 11, 2, 10, 0))
+    tt.stop(now=datetime.datetime(2019, 11, 2, 10, 10))
+    Record = collections.namedtuple("Record", ["id_path", "total"])
+    assert tt.daily_report() == [
+        Record(id_path="foo", total=datetime.timedelta(seconds=600))
     ]
