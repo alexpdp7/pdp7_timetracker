@@ -37,32 +37,36 @@ create table tracked_periods (
     activity_id              text not null references activities(id)
 );
 
-create view reporting_day_periods as (
-    select day::date, tstzrange(day, day + '1 day', '[)') as period
+create function reporting_day_periods (now timestamp with time zone)
+returns table(day date, period tstzrange) as $$
+    select day::date, tstzrange(day, least(day + '1 day', now), '[)') as period
     from generate_series(
         (select date_trunc('day', min(lower(period)))
          from tracked_periods),
         (select date_trunc('day', max(coalesce(upper(period), lower(period))))
          from tracked_periods),
-        '1 day') as days(day));
+        '1 day') as days(day)
+$$ language sql;
 
-create view reporting_daily_tracked_periods as (
+create function reporting_daily_tracked_periods (now timestamp with time zone)
+returns table(activity_id text, day date, period tstzrange, length interval) as $$
     select tracked_periods.activity_id,
            reporting_day_periods.day,
            tracked_periods.period * reporting_day_periods.period as period,
            coalesce(upper(tracked_periods.period * reporting_day_periods.period),
                     lower(tracked_periods.period * reporting_day_periods.period))
            - lower(tracked_periods.period * reporting_day_periods.period) as length
-    from   reporting_day_periods
+    from   reporting_day_periods(now)
     join   tracked_periods on tracked_periods.period && reporting_day_periods.period
-);
+$$ language sql;
 
-create view reporting_daily_tracked_periods_self_and_descendants as (
+create function reporting_daily_tracked_periods_self_and_descendants (now timestamp with time zone)
+returns table(id_path text, day date, period tstzrange, length interval) as $$
     select reporting_activities.id_path,
            reporting_daily_tracked_periods.day,
            reporting_daily_tracked_periods.period,
            reporting_daily_tracked_periods.length
-    from   reporting_daily_tracked_periods
+    from   reporting_daily_tracked_periods(now)
     join   reporting_activities_self_and_descendants on reporting_daily_tracked_periods.activity_id = reporting_activities_self_and_descendants.descendant_id
     join   reporting_activities on reporting_activities_self_and_descendants.id = reporting_activities.id
-);
+$$ language sql;

@@ -44,9 +44,10 @@ class TimeTracker:
     def load_schema(self, *, sql):
         sql.ddl(self.get_schema())
 
-    def daily_report(self, day=None, *, sql):
+    def daily_report(self, day=None, *, sql, now):
         day = day or datetime.date.today()
         return sql.query(
-            "select id_path, sum(length) as total from reporting_daily_tracked_periods_self_and_descendants where day = %(day)s group by id_path order by sum(length) desc",
+            "select id_path, sum(length) as total from reporting_daily_tracked_periods_self_and_descendants(%(now)s) where day = %(day)s group by id_path order by sum(length) desc",
             day=day,
+            now=now,
         )
