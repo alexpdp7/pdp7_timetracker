@@ -62,6 +62,6 @@ def test_start_stop(tt):
     tt.start("foo", now=datetime.datetime(2019, 11, 2, 10, 0))
     tt.stop(now=datetime.datetime(2019, 11, 2, 10, 10))
     Record = collections.namedtuple("Record", ["id_path", "total"])
-    assert tt.daily_report() == [
+    assert tt.daily_report(day=datetime.date(2019, 11, 2)) == [
         Record(id_path="foo", total=datetime.timedelta(seconds=600))
     ]
