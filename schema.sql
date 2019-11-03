@@ -32,7 +32,7 @@ create view reporting_activities_self_and_descendants as
     select *
     from   reporting_activities_self_and_descendants;
 
-create table tracked_period (
+create table tracked_periods (
     period                   tstzrange,
     activity_id              text not null references activities(id)
 );
@@ -41,20 +41,20 @@ create view reporting_day_periods as (
     select day::date, tstzrange(day, day + '1 day', '[)') as period
     from generate_series(
         (select date_trunc('day', min(lower(period)))
-         from tracked_period),
+         from tracked_periods),
         (select date_trunc('day', max(coalesce(upper(period), lower(period))))
-         from tracked_period),
+         from tracked_periods),
         '1 day') as days(day));
 
 create view reporting_daily_tracked_periods as (
-    select tracked_period.activity_id,
+    select tracked_periods.activity_id,
            reporting_day_periods.day,
-           tracked_period.period * reporting_day_periods.period as period,
-           coalesce(upper(tracked_period.period * reporting_day_periods.period),
-                    lower(tracked_period.period * reporting_day_periods.period))
-           - lower(tracked_period.period * reporting_day_periods.period) as length
+           tracked_periods.period * reporting_day_periods.period as period,
+           coalesce(upper(tracked_periods.period * reporting_day_periods.period),
+                    lower(tracked_periods.period * reporting_day_periods.period))
+           - lower(tracked_periods.period * reporting_day_periods.period) as length
     from   reporting_day_periods
-    join   tracked_period on tracked_period.period && reporting_day_periods.period
+    join   tracked_periods on tracked_periods.period && reporting_day_periods.period
 );
 
 create view reporting_daily_tracked_periods_self_and_descendants as (

@@ -22,14 +22,14 @@ class TimeTracker:
 
     def new_tracked_period(self, activity, lower, upper, *, sql):
         sql.dml(
-            "insert into tracked_period(period, activity_id) values (%(range)s, %(activity_id)s)",
+            "insert into tracked_periods(period, activity_id) values (%(range)s, %(activity_id)s)",
             activity_id=activity,
             range=psycopg2.extras.DateTimeTZRange(lower=lower, upper=upper),
         )
 
     def stop(self, *, sql, now):
         sql.dml(
-            "update tracked_period set period = tstzrange(lower(period), %(upper)s) where upper(period) is null",
+            "update tracked_periods set period = tstzrange(lower(period), %(upper)s) where upper(period) is null",
             upper=now,
         )
 
