@@ -22,3 +22,16 @@ def test_start_stop(tt):
     assert tt.daily_report(day=datetime.date(2019, 11, 2)) == [
         Record(id_path="foo", total=datetime.timedelta(seconds=600))
     ]
+
+
+def test_reporting_across_days(tt):
+    tt.new_activity("foo")
+    tt.start("foo", now=datetime.datetime(2019, 11, 2, 23, 0))
+    tt.stop(now=datetime.datetime(2019, 11, 3, 1, 00))
+    Record = collections.namedtuple("Record", ["id_path", "total"])
+    assert tt.daily_report(day=datetime.date(2019, 11, 2)) == [
+        Record(id_path="foo", total=datetime.timedelta(seconds=3600))
+    ]
+    assert tt.daily_report(day=datetime.date(2019, 11, 3)) == [
+        Record(id_path="foo", total=datetime.timedelta(seconds=3600))
+    ]
