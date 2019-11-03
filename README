@@ -4,6 +4,8 @@ $ cat ~/.config/pdp7_timetracking/pdp7_timetracking.config
 [default]
 postgres_connection_string: <connection string>
 
+you can also use docker:<path> as a connection string; this will start a Docker PostgreSQL container with its data directory at the specified path.
+
 psql -1 -v ON_ERROR_STOP=ON -f schema.sql <connection string>
 
 $ titr
