@@ -6,11 +6,12 @@ authors = ["alex <alex@pdp7.net>"]
 
 [tool.poetry.dependencies]
 python = ">=3.6,<4"
-ipython = "^7.9"
-appdirs = "^1.4"
-psycopg2 = "^2.8"
-tabulate = "^0.8.5"
-urllib3 = "^1.25"
+ipython = "^7.9"    # for titr's interactive shell
+appdirs = "^1.4"    # to locate the config file
+psycopg2 = "^2.8"   # to connect to Postgres
+tabulate = "^0.8.5" # to display pretty results in the interactive shell
+testcontainers = { version = "^2.5", extras = ['postgresql'] }
+                    # to use an "embedded" Docker database
 
 [tool.poetry.scripts]
 titr = 'pdp7_timetracker.cmd:main'
@@ -18,9 +19,8 @@ titr = 'pdp7_timetracker.cmd:main'
 [tool.poetry.dev-dependencies]
 flake8 = "*"
 black = { version = "*", allows-prereleases = true }
-flake8-black = "^0.1.1"
-pytest = "^5.2"
-testcontainers = { version = "^2.5", extras = ['postgresql'] }
+flake8-black = "*"
+pytest = "*"
 
 [build-system]
 requires = ["poetry>=0.12"]
