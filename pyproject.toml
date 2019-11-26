@@ -9,7 +9,7 @@ python = ">=3.6,<4"
 ipython = "^7.9"    # for titr's interactive shell
 appdirs = "^1.4"    # to locate the config file
 psycopg2 = "^2.8"   # to connect to Postgres
-tabulate = "^0.8.5" # to display pretty results in the interactive shell
+tabulate = "^0.8.6" # to display pretty results in the interactive shell
 testcontainers = { version = "^2.5", extras = ['postgresql'] }
                     # to use an "embedded" Docker database
 
