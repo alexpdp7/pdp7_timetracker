@@ -46,3 +46,11 @@ def test_reporting_unended(tt):
     assert tt.daily_report(
         day=datetime.date(2019, 11, 2), now=datetime.datetime(2019, 11, 2, 12, 0)
     ) == [Record(id_path="foo", total=datetime.timedelta(seconds=3600))]
+
+
+def test_tabulation(console_tt):
+    console_tt.new_activity("foo")
+    expected = """id    parent_id    id_path
+----  -----------  ---------
+foo                foo"""
+    assert repr(console_tt.activities()) == expected
