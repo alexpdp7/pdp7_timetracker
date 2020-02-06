@@ -6,7 +6,7 @@ authors = ["alex <alex@pdp7.net>"]
 
 [tool.poetry.dependencies]
 python = ">=3.6,<4"
-ipython = "^7.11"    # for titr's interactive shell
+ipython = "^7.12"    # for titr's interactive shell
 appdirs = "^1.4"    # to locate the config file
 psycopg2 = "^2.8"   # to connect to Postgres
 tabulate = "^0.8.6" # to display pretty results in the interactive shell
