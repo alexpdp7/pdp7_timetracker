@@ -62,7 +62,7 @@ $$ language sql;
 
 create function reporting_daily_tracked_periods_self_and_descendants (now timestamp with time zone)
 returns table(id_path text, day date, period tstzrange, length interval) as $$
-    select reporting_activities.id_path,
+    select distinct reporting_activities.id_path,
            reporting_daily_tracked_periods.day,
            reporting_daily_tracked_periods.period,
            reporting_daily_tracked_periods.length

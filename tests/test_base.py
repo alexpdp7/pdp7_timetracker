@@ -52,6 +52,20 @@ def test_reporting_across_days(tt):
     ]
 
 
+def test_reporting_common_parent(tt):
+    tt.new_activity("foo", "bar")
+    tt.new_activity("foo", "baz")
+    tt.start("bar", "baz", now=datetime.datetime(2019, 11, 2, 10, 0))
+    tt.stop(now=datetime.datetime(2019, 11, 2, 10, 10))
+    Record = collections.namedtuple("Record", ["id_path", "total"])
+    later = datetime.datetime(2019, 11, 3)
+    assert tt.daily_report(day=datetime.date(2019, 11, 2), now=later) == [
+        Record(id_path="foo", total=datetime.timedelta(seconds=600)),
+        Record(id_path="foo / bar", total=datetime.timedelta(seconds=600)),
+        Record(id_path="foo / baz", total=datetime.timedelta(seconds=600)),
+    ]
+
+
 def test_reporting_unended(tt):
     tt.new_activity("foo")
     tt.start("foo", now=datetime.datetime(2019, 11, 2, 11, 0))
