@@ -18,7 +18,7 @@ titr = 'pdp7_timetracker.cmd:main'
 
 [tool.poetry.dev-dependencies]
 flake8 = "*"
-black = { version = "*", allows-prereleases = true }
+black = "*"
 flake8-black = "*"
 pytest = "*"
 
