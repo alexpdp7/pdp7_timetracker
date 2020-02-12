@@ -33,9 +33,10 @@ class TimeTracker:
             upper=now,
         )
 
-    def start(self, activity, *, sql, now):
+    def start(self, *activities, sql, now):
         self.stop(sql=sql, now=now)
-        self.new_tracked_period(activity, now, None, sql=sql)
+        for activity in activities:
+            self.new_tracked_period(activity, now, None, sql=sql)
 
     def get_schema(self):
         with open("schema.sql") as s:
