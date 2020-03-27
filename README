@@ -1,3 +1,13 @@
+DEPRECATED
+
+Using ipython as a front-end for time-tracking didn't work as well as I thought it would.
+
+I'm focusing now on using Markdown and an editor for time-tracking:
+
+https://github.com/alexpdp7/markdown_log
+
+...
+
 $ pipx install --spec git+https://github.com/alexpdp7/pdp7_timetracker.git pdp7_timetracker
 
 $ cat ~/.config/pdp7_timetracking/pdp7_timetracking.config 
